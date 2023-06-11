@@ -31,7 +31,7 @@ def ajuste_polinomial(x: List[float], y: List[float], M: int = 2) -> List[float]
             A[i][j] = sum(x[k] ** (i + j) for k in range(n))
             A[j][i] = A[i][j]
 
-    print("A =", A)
+    # print("A =", A)
 
     # calcular b e montar matriz aumentada [A b]
     for i in range(M + 1):
@@ -55,6 +55,35 @@ def ajuste_exponencial(x: List[float], y: List[float]) -> List[float]:
     z = [log(y_i) for y_i in y]
 
     c1, c2 = ajuste_polinomial(x, z, M=1)
+
+    return [e**c1, c2]
+
+
+def ajuste_potencia(x: List[float], y: List[float]) -> List[float]:
+    """
+    Encontra funções de ajuste da forma `y = a*x**b`.
+
+    Aplicando o logaritmo natural em ambos os lados da equação acima:
+    ```py
+    ln(y) = ln(a) + b*ln(x)
+    ```
+
+    Transforma-se em uma função linear:
+
+    ```py
+    z = ln(a) + b*t, z = ln(y) e t = ln(x)
+    ```
+
+    Que pode ser resolvido com um ajuste polinomial de grau 1.
+
+
+    Retorna o vetor de coeficientes do polinômio de ajuste `a` e `b`.
+    """
+
+    z = [log(y_i) for y_i in y]
+    t = [log(x_i) for x_i in x]
+
+    c1, c2 = ajuste_polinomial(t, z, M=1)
 
     return [e**c1, c2]
 
