@@ -76,7 +76,7 @@ def interpolacao_lagrange(x: List[float], y: List[float]) -> Callable[[float], f
     return g
 
 
-def interpolacao_newton(x: List[float], y: List[float]) -> List[float]:
+def interpolacao_newton(x: List[float], y: List[float]) -> Callable[[float], float]:
     """
     Encontra o polinômio interpolador dos pontos tabelados por `x` e `y`
     utilizando o método das diferenças divididas de Newton.
