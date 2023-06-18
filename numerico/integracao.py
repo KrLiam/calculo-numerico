@@ -2,9 +2,36 @@ from typing import Callable
 
 from resources import read_json
 
+
 def integrar_por_trapezios(
-    f: Callable[[float], float], a: float, b: float, p: int = 1
+    f: Callable[[float], float],
+    a: float,
+    b: float,
+    p: int = 1,
 ) -> float:
+    """
+    Resolve a integral definida `∫ a:b f(x)dx` pelo método dos trapézios.
+
+    Argumentos:
+
+    `f`: Função a ser integrada;
+    `a`, `b`: Limites de integração;
+    `p`: Número de sub-divisões do intervalo de integração (p+1 pontos);
+
+    Subdivide a integral de intervalo `[a, b]` em `p` integrais
+    com sub-intervalos de tamanho `h = (b - a) / p`:
+
+    ```
+    ∫ a:b f(x)dx = ∫ a:x1 f(x)dx + ∫ x1:x2 f(x)dx + ... + ∫ xn:b f(x)dx
+    ```
+
+    Que pode ser aproximado com a formula:
+
+    ```
+    ∫ a:b f(x)dx ≃ h/2 * [f(a) + 2(∑ i=1:p-1 f(xi)) + f(b)]
+    ```
+    """
+
     h = (b - a) / p
 
     soma = sum(f(a + i * h) for i in range(1, p))
@@ -15,14 +42,18 @@ def integrar_por_trapezios(
 ABCISSAE = read_json("abcissae.json")
 WEIGHTS = read_json("weights.json")
 
+
 def integrar_por_quadratura(
-    f: Callable[[float], float], a: float, b: float, n: float
+    f: Callable[[float], float],
+    a: float,
+    b: float,
+    n: float = 2,
 ) -> float:
     """
     Resolve a integral definida `∫ a:b f(x)dx` pelo método da quadratura gaussiana.
 
     Argumentos:
-    
+
     `f`: Função a ser integrada;
     `a`, `b`: Limites de integração;
     `n`: Número de pontos da quadratura;
@@ -30,7 +61,7 @@ def integrar_por_quadratura(
     Padroniza o limite de integração de `[a, b]` para `[-1, 1]` a
     partir da troca de variáveis de `x` para `t`:
 
-    ```py
+    ```
     x = (1/2)(b - a)t + (1/2)(b + a)
     dx = (1/2)(b - a)dt
     ```
@@ -38,18 +69,18 @@ def integrar_por_quadratura(
     Substitui `x` e `dx` na integral e utiliza um somatório para realizar
     a aproximação:
 
-    ```py
+    ```
     ∫ a:b f(x)dx
     = ∫ -1:1 F(t)dt
-    ≃ ∑ i=1:n (A[i] * F(t[i]))
+    ≃ ∑ i=0:n-1 (A[i] * F(T[i]))
     ```
 
-    Sendo `F(t) = f(x(t)) * (1/2)(b - a)`; `A` e `t` vetores de
+    Sendo `F(t) = f(x(t)) * (1/2)(b - a)`; `A` e `T` vetores de
     pesos e valores de t aproximados pela quadratura de
-    [Lengrende-Gauss](https://pomax.github.io/bezierinfo/legendre-gauss.html).
+    [Legrende-Gauss](https://pomax.github.io/bezierinfo/legendre-gauss.html).
     """
 
-    x = lambda t: ((b - a)*t + (b + a)) / 2
+    x = lambda t: ((b - a) * t + (b + a)) / 2
     F = lambda t: f(x(t)) * (b - a) / 2
 
     A = WEIGHTS[n]
@@ -61,10 +92,10 @@ def integrar_por_quadratura(
 if __name__ == "__main__":
     from math import cos, sin
 
-    f = lambda x: x**2 + 5*cos(x)
+    f = lambda x: x**2 + 5 * cos(x)
     a, b = 0, 4
 
-    F = lambda x: x**3 / 3 + 5*sin(x)
+    F = lambda x: x**3 / 3 + 5 * sin(x)
     print("exato: ", F(4) - F(0), "\n")
 
     for n in range(2, 10):
