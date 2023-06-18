@@ -13,10 +13,9 @@ def integrar_por_trapezios(
     Resolve a integral definida `∫ a:b f(x)dx` pelo método dos trapézios.
 
     Argumentos:
-
-    `f`: Função a ser integrada;
-    `a`, `b`: Limites de integração;
-    `n`: Número de sub-divisões do intervalo de integração (`n + 1` pontos);
+    - `f`: Função a ser integrada;
+    - `a`, `b`: Limites de integração;
+    - `n`: Número de sub-divisões do intervalo de integração (`n + 1` pontos);
 
     Subdivide a integral de intervalo `[a, b]` em `n` integrais
     com sub-intervalos de tamanho `h = (b - a) / n`:
@@ -49,10 +48,9 @@ def integrar_por_simpson(
     Resolve a integral definida `∫ a:b f(x)dx` pelo método de simpson.
 
     Argumentos:
-
-    `f`: Função a ser integrada;
-    `a`, `b`: Limites de integração;
-    `n`: Número de sub-divisões do intervalo de integração. Se o
+    - `f`: Função a ser integrada;
+    - `a`, `b`: Limites de integração;
+    - `n`: Número de sub-divisões do intervalo de integração. Se o
     valor fornecido for ímpar, `n + 1` será utilizado;
 
     ```
@@ -63,13 +61,12 @@ def integrar_por_simpson(
     n += n % 2
     h = (b - a) / n
 
-    x = [a + i*h for i in range(0, n+1)]
+    x = [a + i * h for i in range(0, n + 1)]
 
     soma_imps = sum(f(x[i]) for i in range(1, n, 2))
     soma_pares = sum(f(x[i]) for i in range(2, n, 2))
 
     return (f(a) + 4 * soma_imps + 2 * soma_pares + f(b)) * h / 3
-
 
 
 ABCISSAE = read_json("abcissae.json")
@@ -86,10 +83,9 @@ def integrar_por_quadratura(
     Resolve a integral definida `∫ a:b f(x)dx` pelo método da quadratura gaussiana.
 
     Argumentos:
-
-    `f`: Função a ser integrada;
-    `a`, `b`: Limites de integração;
-    `n`: Número de pontos da quadratura;
+    - `f`: Função a ser integrada;
+    - `a`, `b`: Limites de integração;
+    - `n`: Número de pontos da quadratura;
 
     Padroniza o limite de integração de `[a, b]` para `[-1, 1]` a
     partir da troca de variáveis de `x` para `t`:
@@ -132,10 +128,10 @@ if __name__ == "__main__":
     print("exato: ", F(4) - F(0), "\n")
 
     for p in range(3, 14, 2):
-        r1 = integrar_por_trapezios(f, a, b, p-1)
+        r1 = integrar_por_trapezios(f, a, b, p - 1)
         print(f"trapezios, {p} pontos:", r1)
 
-        r2 = integrar_por_simpson(f, a, b, p-1)
+        r2 = integrar_por_simpson(f, a, b, p - 1)
         print(f"simpson, {p + 1 - p % 2} pontos:", r2)
 
         r2 = integrar_por_quadratura(f, a, b, p)
